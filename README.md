@@ -28,6 +28,7 @@ volumes:
 ### Compose
 
 - [x] Create clickhouse network `$ docker network create clickhouse-net`
+- [x] Check `$ docker network ls`
 - [x] Run `$ docker-compose up -d`
 
 **Output**
