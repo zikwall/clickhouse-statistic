@@ -19,10 +19,10 @@
 ```yaml
 volumes:
       - ./configuration/config.xml:/etc/clickhouse-server/config.xml
-      - ./config/macroses/macros-01.xml:/etc/clickhouse-server/config.d/macros.xml
-      - ./config/metrika.xml:/etc/clickhouse-server/metrika.xml
+      - ./configuration/macroses/macros-01.xml:/etc/clickhouse-server/config.d/macros.xml
+      - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       # Для users_config могут также существовать переопределения в файлах из директории users_config.d (например, users.d) и подстановки. 
-      - ./config/users.xml:/etc/clickhouse-server/users.xml
+      - ./configuration/users.xml:/etc/clickhouse-server/users.xml
 ```
 
 ### Compose
