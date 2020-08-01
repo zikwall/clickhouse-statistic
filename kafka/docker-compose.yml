@@ -1,0 +1,33 @@
+version: "3.3"
+
+services:
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.0
+    networks:
+      - kafka_network
+    volumes:
+      - /shared/ch/kafka:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: DOCKER_NET://kafka:9093,HOST_NET://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER_NET:PLAINTEXT,HOST_NET:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_NET
+      KAFKA_LISTENERS: DOCKER_NET://0.0.0.0:9093,HOST_NET://0.0.0.0:9092
+      KAFKA_CREATE_TOPICS: "MyTopic:1:1"
+    links:
+      - zookeeper
+    ports:
+      - 9092:9092
+  zookeeper:
+    image: zookeeper
+    networks:
+      - kafka_network
+    volumes:
+      - /shared/ch/zookeeper:/data
+    ports:
+      - 2181:2181
+  networks:
+    kafka_network:
+      name: kafka
+      driver: bridge
