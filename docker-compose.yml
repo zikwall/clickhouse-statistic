@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
   clickhouse-zookeeper:
@@ -8,6 +8,24 @@ services:
       - "2182:2182"
     container_name: clickhouse-zookeeper
     hostname: clickhouse-zookeeper
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.0
+    ports:
+      - 9092:9092
+    networks:
+      - clickhouse-net
+    volumes:
+      - /shared/ch/kafka:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: DOCKER_NET://0.0.0.0:9093,HOST_NET://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER_NET:PLAINTEXT,HOST_NET:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_NET
+      KAFKA_LISTENERS: DOCKER_NET://0.0.0.0:9093,HOST_NET://0.0.0.0:9092
+      KAFKA_CREATE_TOPICS: "MyTopic:1:1"
+    depends_on:
+      - "clickhouse-zookeeper"
 
   clickhouse-01:
     image: yandex/clickhouse-server
@@ -116,7 +134,7 @@ services:
         hard: 262144
     depends_on:
       - "clickhouse-zookeeper"
-networks:
-  default:
-    external:
-      name: clickhouse-net
+  networks:
+    default:
+      external:
+        name: clickhouse-net
