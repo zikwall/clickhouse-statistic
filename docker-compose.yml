@@ -19,15 +19,16 @@ services:
     ports:
       - 9092:9092
     volumes:
-      - /shared/ch/kafka:/data
+      - /shared/ch/kafka/kafka:/kafka
+      - /shared/ch/kafka/logs:/tmp/kafka-logs
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: DOCKER_NET://0.0.0.0:9093,HOST_NET://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+      KAFKA_ADVERTISED_LISTENERS: DOCKER_NET://localhost:9093,HOST_NET://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: DOCKER_NET:PLAINTEXT,HOST_NET:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_NET
-      KAFKA_LISTENERS: DOCKER_NET://0.0.0.0:9093,HOST_NET://0.0.0.0:9092
-      KAFKA_CREATE_TOPICS: "MyTopic:5:5"
+      KAFKA_LISTENERS: DOCKER_NET://localhost:9093,HOST_NET://localhost:9092
+      KAFKA_CREATE_TOPICS: "MyTopic:1:1"
     depends_on:
       - "clickhouse-zookeeper"
 
