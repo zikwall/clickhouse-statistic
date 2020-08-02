@@ -8,8 +8,11 @@ services:
       - "2182:2182"
     container_name: clickhouse-zookeeper
     hostname: clickhouse-zookeeper
+
   kafka:
     image: wurstmeister/kafka:2.12-2.5.0
+    hostname: clickhouse-kafka
+    container_name: clickhouse-kafka
     ports:
       - 9092:9092
     networks:
@@ -38,6 +41,8 @@ services:
       - ./configuration/macroses/macros-01.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -56,6 +61,8 @@ services:
       - ./configuration/macroses/macros-02.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -74,6 +81,8 @@ services:
       - ./configuration/macroses/macros-03.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -92,6 +101,8 @@ services:
       - ./configuration/macroses/macros-04.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -110,6 +121,8 @@ services:
       - ./configuration/macroses/macros-05.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -128,6 +141,8 @@ services:
       - ./configuration/macroses/macros-06.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
+      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
