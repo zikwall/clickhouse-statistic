@@ -8,7 +8,10 @@ services:
       - "2182:2182"
     container_name: clickhouse-zookeeper
     hostname: clickhouse-zookeeper
-
+    volumes:
+      - /shared/ch/zookeeper/data:/data
+      - /shared/ch/zookeeper/datalog:/datalog
+      - /shared/ch/zookeeper/logs:/logs
   kafka:
     image: wurstmeister/kafka:2.12-2.5.0
     hostname: clickhouse-kafka
