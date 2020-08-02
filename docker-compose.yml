@@ -15,8 +15,6 @@ services:
     container_name: clickhouse-kafka
     ports:
       - 9092:9092
-    networks:
-      - clickhouse-net
     volumes:
       - /shared/ch/kafka:/data
       - /var/run/docker.sock:/var/run/docker.sock
