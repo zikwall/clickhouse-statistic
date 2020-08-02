@@ -1,46 +1,51 @@
-## Clickhouse compose project
+## Clickhouse Container statistic project
 
-### Try
+### Getting Started
 
+- [x] `$ mkdir -p /shared/ch/{clickhouse,zookeeper,kafka}`
 - [x] First step create clickhouse network `$ docker network create clickhouse-net`
 - [x] You can check result of prev. step `$ docker network ls`
 - [x] If OK, then run `$ docker-compose up -d`
 
-**Output**
-
-```shell script
-msi@msi clickhouse-compose # docker-compose up -d
-Starting clickhouse-zookeeper ... done
-Recreating clickhouse-04      ... done
-Recreating clickhouse-05      ... done
-Recreating clickhouse-01      ... done
-Recreating clickhouse-02      ... done
-Recreating clickhouse-06      ... done
-Recreating clickhouse-03      ... done
-```
+<details>
+  <summary>Output</summary>
+  
+  ```shell script
+    msi@msi clickhouse-compose # docker-compose up -d
+    Starting clickhouse-zookeeper ... done
+    Recreating clickhouse-04      ... done
+    Recreating clickhouse-05      ... done
+    Recreating clickhouse-01      ... done
+    Recreating clickhouse-02      ... done
+    Recreating clickhouse-06      ... done
+    Recreating clickhouse-03      ... done
+  ```
+</details>
 
 - [x] Again check `$ docker container ls -a`
 
-**Output**
+<details>
+  <summary>Output</summary>
+  
+  ```shell script
+    CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                                                            NAMES
+    442a79a43f3a        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9003->9000/tcp                       clickhouse-03
+    f5279aec0e37        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9006->9000/tcp                       clickhouse-06
+    3a783ee75502        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9002->9000/tcp                       clickhouse-02
+    ace4df988157        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9001->9000/tcp                       clickhouse-01
+    a40ac11a5194        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9005->9000/tcp                       clickhouse-05
+    23495201a490        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9004->9000/tcp                       clickhouse-04
+    8de765edf713        zookeeper                  "/docker-entrypoint.…"   4 minutes ago       Up 2 minutes        2888/tcp, 3888/tcp, 0.0.0.0:2181-2182->2181-2182/tcp, 8080/tcp   clickhouse-zookeeper
+    ... other own containers
+  ```
+</details>
 
-```shell script
-CONTAINER ID        IMAGE                      COMMAND                  CREATED             STATUS              PORTS                                                            NAMES
-442a79a43f3a        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9003->9000/tcp                       clickhouse-03
-f5279aec0e37        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9006->9000/tcp                       clickhouse-06
-3a783ee75502        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9002->9000/tcp                       clickhouse-02
-ace4df988157        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9001->9000/tcp                       clickhouse-01
-a40ac11a5194        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9005->9000/tcp                       clickhouse-05
-23495201a490        yandex/clickhouse-server   "/entrypoint.sh"         2 minutes ago       Up 2 minutes        8123/tcp, 9009/tcp, 0.0.0.0:9004->9000/tcp                       clickhouse-04
-8de765edf713        zookeeper                  "/docker-entrypoint.…"   4 minutes ago       Up 2 minutes        2888/tcp, 3888/tcp, 0.0.0.0:2181-2182->2181-2182/tcp, 8080/tcp   clickhouse-zookeeper
-... other own containers
-```
+- [x] For stopping all containers `$ docker-compose stop`
 
 ### Connect to one of cluster server
 
 - [x] `$ docker run -it --rm --network="clickhouse-net" --link clickhouse-01:clickhouse-server yandex/clickhouse-client --host clickhouse-server`
 - [x] Check: `SELECT * FROM system.clusters;`
-
-**Output**
 
 ```shell script
 clickhouse-01 :) SELECT * FROM system.clusters;
@@ -60,10 +65,11 @@ FROM system.clusters
 └─────────────────────────────┴───────────┴──────────────┴─────────────┴───────────────┴──────────────┴──────┴──────────┴─────────┴──────────────────┴──────────────┴─────────────────────────┘
 ```
 
-### Distributed
+### Create first data
 
-`// todo`
+- [x] Use `.sql` files for create tables from folder [example/database](./example/database)
 
 ### Following manuals
 
 - [x] https://github.com/zikwall/clickhouse-docs
+- [x] [Advanced manual](./ADVANCED.md)
