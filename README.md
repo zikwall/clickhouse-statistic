@@ -126,6 +126,28 @@ docker exec -it clickhouse-kafka \
 - [x] Show full logs fro Kafka run: `$ docker logs -f clickhouse-kafka`
 - [x] [Kafkacat](https://github.com/edenhill/kafkacat)
 
+### How wotk with Zookeeper
+
+- [x] Connect container `$ docker exec -it clickhouse-zookeeper bash`
+- [x] Connect server `$ bin/zkCli.sh -server 127.0.0.1:2181`
+- [x] List root `$ ls /`
+
+**Output**
+
+```shell script
+[admin, brokers, clickhouse, cluster, config, consumers, controller, controller_epoch, isr_change_notification, latest_producer_id_block, log_dir_event_notification, zookeeper]
+```
+
+- [x] `$ ls brokers/` after `$ ls brokers/topics`
+
+**Output**
+
+```shell script
+[MyTopic, MyTopic1, __consumer_offsets]
+```
+
+- [x] `$ ls /consumers`
+
 ### Following manuals
 
 - [x] https://github.com/zikwall/clickhouse-docs
