@@ -39,8 +39,8 @@ services:
       - ./configuration/macroses/macros-01.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch1:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch1:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -59,8 +59,8 @@ services:
       - ./configuration/macroses/macros-02.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch2:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch2:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -79,8 +79,8 @@ services:
       - ./configuration/macroses/macros-03.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch3:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch3:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -99,8 +99,8 @@ services:
       - ./configuration/macroses/macros-04.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch4:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch4:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -119,8 +119,8 @@ services:
       - ./configuration/macroses/macros-05.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch5:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch5:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
@@ -139,8 +139,8 @@ services:
       - ./configuration/macroses/macros-06.xml:/etc/clickhouse-server/config.d/macros.xml
       - ./configuration/metrika.xml:/etc/clickhouse-server/metrika.xml
       - ./configuration/users.xml:/etc/clickhouse-server/users.xml
-      - /shared/ch/clickhouse/log:/var/log/clickhouse-server
-      - /shared/ch/clickhouse/data:/var/lib/clickhouse
+      - /shared/ch/clickhouse/log/ch6:/var/log/clickhouse-server
+      - /shared/ch/clickhouse/data/ch6:/var/lib/clickhouse
     ulimits:
       nofile:
         soft: 262144
