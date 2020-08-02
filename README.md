@@ -109,7 +109,7 @@ docker exec -t clickhouse-kafka \
   kafka-console-consumer.sh \
     --bootstrap-server :9092 \
     --group jacek-japila-pl \
-    --topic t1
+    --topic MyTopic1
 ```
 
 - [x] Run Kafka console producer
