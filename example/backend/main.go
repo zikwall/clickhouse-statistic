@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/segmentio/kafka-go"
 	"math/rand"
-	"sync"
 	"time"
 )
 
@@ -42,12 +41,8 @@ func main() {
 	defer w.Close()
 
 	message := make(chan Main)
-	var wg sync.WaitGroup
 
 	go func() {
-		wg.Add(1)
-		defer wg.Done()
-
 		for i := 0; i <= 10; i++ {
 			produce(message)
 		}
@@ -56,8 +51,6 @@ func main() {
 	go lookup(message, w)
 
 	//consumer(r)
-
-	wg.Wait()
 }
 
 func produce(message chan<- Main) {
