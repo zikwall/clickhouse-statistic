@@ -41,27 +41,29 @@ func main() {
 	})
 	defer w.Close()
 
-	wg := &sync.WaitGroup{}
 	message := make(chan Main)
+	var wg sync.WaitGroup
 
-	for i := 0; i <= 10; i++ {
-		go producer(message, wg)
-	}
+	go func() {
+		wg.Add(1)
+		defer wg.Done()
 
-	go sender(message, w)
-	go consumer(r)
+		for i := 0; i <= 10; i++ {
+			produce(message)
+		}
+	}()
+
+	go lookup(message, w)
+
+	//consumer(r)
 
 	wg.Wait()
 }
 
-func producer(message chan<- Main, wg *sync.WaitGroup) {
-	wg.Add(1)
-	defer wg.Done()
-
+func produce(message chan<- Main) {
 	// or timestamp
 	now := time.Now().Format("2006-01-02 15:04:05")
-
-	message <- Main{
+	msg := Main{
 		UserId:    uint32(rand.Intn(30-10) + 10),
 		App:       "",
 		Host:      "",
@@ -70,11 +72,12 @@ func producer(message chan<- Main, wg *sync.WaitGroup) {
 		Guid:      "",
 		CreatedAt: now,
 	}
+
+	message <- msg
 }
 
-func sender(message <-chan Main, w *kafka.Writer) {
-	for {
-		msg := <-message
+func lookup(message <-chan Main, w *kafka.Writer) {
+	for msg := range message {
 		jsonbytes, err := json.Marshal(msg)
 		if err != nil {
 			fmt.Println(err)
@@ -96,7 +99,7 @@ func consumer(r *kafka.Reader) {
 	for {
 		m, err := r.ReadMessage(context.Background())
 		if err != nil {
-			break
+			fmt.Println(err)
 		}
 		fmt.Printf("message at topic/partition/offset %v/%v/%v: %s = %s\n", m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
 	}
