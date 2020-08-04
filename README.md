@@ -1,4 +1,8 @@
-## Clickhouse Container statistic project
+<div align="center">
+  <h1>Clickhouse container statistic project</h1>
+  <h4>Your mini assistant in future problems :)</h4>
+  <h5>This guide contains step by step instructions with working examples of deploying Clickhouse, Apache Kafka, Zookeeper in Docker</h5>
+</div>
 
 ### Getting Started
 
@@ -294,6 +298,8 @@ FROM main
 │      71 │
 └─────────┘
 ```
+
+Happy! ^_^
 
 ### Following manuals
 
