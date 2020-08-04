@@ -6,4 +6,4 @@ CREATE TABLE queue (
     `ip` String,
     `guid` String,
     `created_at` DateTime('Europe/London')
-) ENGINE = Kafka('0.0.0.0:9092', 'MyTopic', 'group1', 'JSONEachRow') SETTINGS kafka_num_consumers = 2;
+) ENGINE = Kafka('0.0.0.0:9092', 'MyTopic', 'my-group', 'JSONEachRow') SETTINGS kafka_num_consumers = 2;
