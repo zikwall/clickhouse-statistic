@@ -78,7 +78,7 @@ docker exec -t clickhouse-kafka \
   kafka-topics.sh \
     --bootstrap-server :9092 \
     --create \
-    --topic MyTopicName \
+    --topic ClickhouseTopic \
     --partitions 3 \
     --replication-factor 1
 ```
@@ -151,6 +151,7 @@ docker exec -it clickhouse-kafka \
 ### Tests
 
 - [x] First add next line `127.0.0.1    clickhouse-kafka` in `/etc/hosts`, for DEV, why? [1](https://ealebed.github.io/posts/2018/docker-%D1%81%D0%BE%D0%B2%D0%B5%D1%82-28-%D0%BA%D0%B0%D0%BA-%D0%B8%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D1%83-connection-reset-by-peer/), [2](https://github.com/grafana/metrictank/issues/1286), [3](https://github.com/wurstmeister/kafka-docker/issues/424)
+- [x] Create topic `ClickhouseTopic` if already is not created
 - [x] Run consumer in another terminal
 - [x] Run app from example/backend `$ go run .`
 

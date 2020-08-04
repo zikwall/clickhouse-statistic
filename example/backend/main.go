@@ -57,14 +57,14 @@ func SetupCloseHandler(r *kafka.Reader, w *kafka.Writer) {
 func main() {
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers: []string{"localhost:9093"},
-		Topic:   "MyTopic",
+		Topic:   "ClickhouseTopic",
 		GroupID: "my-group",
 	})
 	defer r.Close()
 
 	w := kafka.NewWriter(kafka.WriterConfig{
 		Brokers: []string{"localhost:9093"},
-		Topic:   "MyTopic",
+		Topic:   "ClickhouseTopic",
 	})
 	defer w.Close()
 
@@ -94,7 +94,7 @@ func main() {
 	}()
 
 	go lookup(message)
-	go consumer(ctx, r)
+	//go consumer(ctx, r)
 
 	wg.Wait()
 }
