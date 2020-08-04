@@ -227,12 +227,14 @@ docker exec -it clickhouse-kafka \
   ```
 </details>
 
-- [x] Another terminal `make cluster-client` for connect ch-01 server
+- [x] Another terminal `make cluster-client` for connect `ch-01` server
 - [x] `SELECT * from main;`
 
 **Output**
 
 ```shell script
+clickhouse-01 :) select * from main;
+
 ┌─user_id─┬─app─┬─host─┬─event─┬─ip─┬─guid─┬──────────created_at─┐
 │      10 │     │      │       │    │      │ 2020-08-04 15:48:12 │
 │      29 │     │      │       │    │      │ 2020-08-04 15:48:13 │
@@ -243,6 +245,54 @@ docker exec -it clickhouse-kafka \
 │      11 │     │      │       │    │      │ 2020-08-04 15:48:18 │
 │      27 │     │      │       │    │      │ 2020-08-04 15:48:19 │
 └─────────┴─────┴──────┴───────┴────┴──────┴─────────────────────┘
+```
+
+### Cluster
+
+- [x] Create `main`, `queue` and `mainconsumer` tables each hosts `ch-`: 01, 02, 03, 04, 05
+- [x] Create distributed table on last host `ch-06` from `example/database/distributed.sql`
+- [x] connect `ch-06` see `make cluster-client` and replace `clickhouse-01` to `clickhouse-06`
+- [x] `SELECT COUNT() FROM main_distributed`;
+
+**Output**
+
+```shell script
+clickhouse-06 :) select count() from main_distributed;
+
+SELECT count()
+FROM main_distributed
+
+┌─count()─┐
+│    1016 │
+└─────────┘
+```
+
+- [x] Check connect one of server, example `ch-01`, `ch-02` and `SELECT count(*) from main;`
+
+**Output**
+
+```shell script
+clickhouse-01 :) select count() from main;
+
+SELECT count()
+FROM main
+
+┌─count()─┐
+│     945 │
+└─────────┘
+```
+
+**Output**
+
+```shell script
+clickhouse-02 :) select count() from main;
+
+SELECT count()
+FROM main
+
+┌─count()─┐
+│      71 │
+└─────────┘
 ```
 
 ### Following manuals
