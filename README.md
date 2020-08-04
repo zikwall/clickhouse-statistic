@@ -156,6 +156,7 @@ docker exec -it clickhouse-kafka \
 
 <details>
   <summary>Output in Go terminal</summary>
+  
   ```shell script
       Send message to broker: user 23, time 2020-08-04 13:58:14
       Send message to broker: user 16, time 2020-08-04 13:58:15
@@ -184,6 +185,7 @@ docker exec -it clickhouse-kafka \
 
 <details>
   <summary>Output in consumer terminal</summary>
+  
   ```shell script
       {"user_id":19,"app":"","host":"","event":"","ip":"","guid":"","created_at":"2020-08-04 13:58:23"}
       {"user_id":18,"app":"","host":"","event":"","ip":"","guid":"","created_at":"2020-08-04 13:58:24"}
