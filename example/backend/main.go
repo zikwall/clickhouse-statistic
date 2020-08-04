@@ -6,6 +6,10 @@ import (
 	"fmt"
 	"github.com/segmentio/kafka-go"
 	"math/rand"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 	"time"
 )
 
@@ -23,77 +27,112 @@ func (m Main) String() string {
 	return fmt.Sprintf("Send message to broker: user %d, time %s", m.UserId, m.CreatedAt)
 }
 
+func SetupCloseHandler(r *kafka.Reader, w *kafka.Writer) {
+	sig := make(chan os.Signal)
+	signal.Notify(sig, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-sig
+
+		fmt.Println("Close by signal")
+
+		err := w.Close()
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		err = r.Close()
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		// todo wait last gorutines
+
+		os.Exit(0)
+	}()
+}
+
 func main() {
 	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{"localhost:9092"},
-		Topic:     "Topic1",
-		Partition: 0,
-		MinBytes:  10e3, // 10KB
-		MaxBytes:  10e6, // 10MB
+		Brokers: []string{"localhost:9093"},
+		Topic:   "MyTopic",
+		GroupID: "my-group",
 	})
 	defer r.Close()
 
 	w := kafka.NewWriter(kafka.WriterConfig{
-		Brokers:  []string{"localhost:9092"},
-		Topic:    "Topic1",
-		Balancer: &kafka.LeastBytes{},
+		Brokers: []string{"localhost:9093"},
+		Topic:   "MyTopic",
 	})
 	defer w.Close()
 
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+
 	message := make(chan Main)
+	ctx := context.Background()
+	//SetupCloseHandler(r, w)
 
 	go func() {
-		for i := 0; i <= 10; i++ {
-			produce(message)
+		for i := 0; i <= 1000; i++ {
+			// or timestamp
+			now := time.Now().Format("2006-01-02 15:04:05")
+			msg := Main{
+				UserId:    uint32(rand.Intn(30-10) + 10),
+				App:       "",
+				Host:      "",
+				Event:     "",
+				Ip:        "",
+				Guid:      "",
+				CreatedAt: now,
+			}
+
+			producer(ctx, w, message, msg)
 		}
 	}()
 
-	go lookup(message, w)
+	go lookup(message)
+	go consumer(ctx, r)
 
-	//consumer(r)
+	wg.Wait()
 }
 
-func produce(message chan<- Main) {
-	// or timestamp
-	now := time.Now().Format("2006-01-02 15:04:05")
-	msg := Main{
-		UserId:    uint32(rand.Intn(30-10) + 10),
-		App:       "",
-		Host:      "",
-		Event:     "",
-		Ip:        "",
-		Guid:      "",
-		CreatedAt: now,
+func producer(ctx context.Context, w *kafka.Writer, message chan<- Main, msg Main) {
+	message <- msg
+
+	jsonbytes, err := json.Marshal(msg)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
-	message <- msg
+	err = w.WriteMessages(ctx,
+		kafka.Message{
+			Value: jsonbytes,
+		},
+	)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
-func lookup(message <-chan Main, w *kafka.Writer) {
+func lookup(message <-chan Main) {
 	for msg := range message {
-		jsonbytes, err := json.Marshal(msg)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		w.WriteMessages(context.Background(),
-			kafka.Message{
-				Key:   []byte("Key-A"),
-				Value: jsonbytes,
-			},
-		)
-
 		fmt.Println(msg)
 	}
 }
 
-func consumer(r *kafka.Reader) {
+func consumer(ctx context.Context, r *kafka.Reader) {
 	for {
-		m, err := r.ReadMessage(context.Background())
+		m, err := r.ReadMessage(ctx)
+
 		if err != nil {
 			fmt.Println(err)
 		}
+
 		fmt.Printf("message at topic/partition/offset %v/%v/%v: %s = %s\n", m.Topic, m.Partition, m.Offset, string(m.Key), string(m.Value))
 	}
 }
