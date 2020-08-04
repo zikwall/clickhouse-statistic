@@ -1,4 +1,4 @@
-CREATE TABLE main
+CREATE TABLE main_distributed
 (
     `user_id` UInt32,
     `app` String,
