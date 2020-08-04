@@ -137,7 +137,7 @@ docker exec -it clickhouse-kafka \
 ```shell script
 docker exec -it clickhouse-kafka \
   kafka-topics.sh \
-    --bootstrap-server :2181
+    --bootstrap-server :2181 \
     --topic MyTopic1 \
     --delete
 ```
@@ -227,6 +227,23 @@ docker exec -it clickhouse-kafka \
   ```
 </details>
 
+- [x] Another terminal `make cluster-client` for connect ch-01 server
+- [x] `SELECT * from main;`
+
+**Output**
+
+```shell script
+┌─user_id─┬─app─┬─host─┬─event─┬─ip─┬─guid─┬──────────created_at─┐
+│      10 │     │      │       │    │      │ 2020-08-04 15:48:12 │
+│      29 │     │      │       │    │      │ 2020-08-04 15:48:13 │
+│      24 │     │      │       │    │      │ 2020-08-04 15:48:14 │
+│      14 │     │      │       │    │      │ 2020-08-04 15:48:15 │
+│      10 │     │      │       │    │      │ 2020-08-04 15:48:16 │
+│      21 │     │      │       │    │      │ 2020-08-04 15:48:17 │
+│      11 │     │      │       │    │      │ 2020-08-04 15:48:18 │
+│      27 │     │      │       │    │      │ 2020-08-04 15:48:19 │
+└─────────┴─────┴──────┴───────┴────┴──────┴─────────────────────┘
+```
 
 ### Following manuals
 
