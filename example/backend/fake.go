@@ -1,6 +1,9 @@
 package main
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 var events = []string{
 	"clicked", "touched", "cancelled", "visited", "viewed",
@@ -21,4 +24,8 @@ func faker(s []string) string {
 
 func user() uint32 {
 	return uint32(rand.Intn(30-10) + 10)
+}
+
+func now() string {
+	return time.Now().Format("2006-01-02 15:04:05")
 }

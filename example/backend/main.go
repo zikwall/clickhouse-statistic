@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
-	"time"
 )
 
 type Main struct {
@@ -79,8 +78,6 @@ func main() {
 
 	go func() {
 		for i := 0; i <= 1000; i++ {
-			// or timestamp
-			now := time.Now().Format("2006-01-02 15:04:05")
 			msg := Main{
 				UserId:    user(),
 				App:       faker(apps),
@@ -88,7 +85,7 @@ func main() {
 				Event:     faker(events),
 				Ip:        "",
 				Guid:      "",
-				CreatedAt: now,
+				CreatedAt: now(),
 			}
 
 			producer(ctx, w, message, msg)
