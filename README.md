@@ -48,7 +48,7 @@
 
 ### Connect to one of cluster server
 
-- [x] `$ docker run -it --rm --network="clickhouse-net" --link clickhouse-01:clickhouse-server yandex/clickhouse-client --host clickhouse-server`
+- [x] `$ make cluster-client ch=01`
 - [x] Check: `SELECT * FROM system.clusters;`
 
 ```shell script
@@ -231,7 +231,7 @@ docker exec -it clickhouse-kafka \
   ```
 </details>
 
-- [x] Another terminal `make cluster-client` for connect `ch-01` server
+- [x] Another terminal `make cluster-client ch=01` for connect `ch-01` server
 - [x] `SELECT * from main;`
 
 **Output**
@@ -253,9 +253,12 @@ clickhouse-01 :) select * from main;
 
 ### Cluster
 
-- [x] Create `main`, `queue` and `mainconsumer` tables each hosts `ch-`: 01, 02, 03, 04, 05, you can use `$ bin/create-replica.sh 03`
-- [x] Create distributed table on last host `ch-06` from `example/database/distributed.sql`, or use `$ bin/create-distributed.sh 06`
-- [x] connect to `ch-06`, u can see Makefile command `make cluster-client` and replace `clickhouse-01` to `clickhouse-06`
+- [x] Create `main`, `queue` and `mainconsumer` tables each hosts `ch-`: 01, 02, 03, 04, 05
+    - you can use `$ bin/create-replica.sh 03`
+- [x] Create distributed table on last host `ch-06` from `example/database/distributed.sql`
+    - or use `$ bin/create-distributed.sh 06`
+- [x] connect to `ch-06`
+    - `$ make cluster-client ch=06`
 - [x] `SELECT COUNT() FROM main_distributed`;
 
 **Output**
