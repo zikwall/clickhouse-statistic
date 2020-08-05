@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/segmentio/kafka-go"
-	"math/rand"
 	"os"
 	"os/signal"
 	"sync"
@@ -24,7 +23,10 @@ type Main struct {
 }
 
 func (m Main) String() string {
-	return fmt.Sprintf("Send message to broker: user %d, time %s", m.UserId, m.CreatedAt)
+	return fmt.Sprintf(
+		"Send message to broker event %s: user %d, time %s from host %s & app %s",
+		m.Event, m.UserId, m.CreatedAt, m.Host, m.App,
+	)
 }
 
 func SetupCloseHandler(r *kafka.Reader, w *kafka.Writer) {
@@ -80,10 +82,10 @@ func main() {
 			// or timestamp
 			now := time.Now().Format("2006-01-02 15:04:05")
 			msg := Main{
-				UserId:    uint32(rand.Intn(30-10) + 10),
-				App:       "",
-				Host:      "",
-				Event:     "",
+				UserId:    user(),
+				App:       faker(apps),
+				Host:      faker(hosts),
+				Event:     faker(events),
 				Ip:        "",
 				Guid:      "",
 				CreatedAt: now,
