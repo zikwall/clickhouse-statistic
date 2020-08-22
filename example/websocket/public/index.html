@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form name="publish">
+    <input type="text" name="message">
+    <input type="submit" value="Отправить">
+    <input id="close" type="button" value="Закрыть соединение">
+    <input id="open" type="button" value="Открыть соединение">
+</form>
+
+<div id="subscribe"></div>
+
+<script type="text/javascript">
+    var socket = new WebSocket("ws://localhost:3000/ws");
+
+    socket.onopen = function() {
+        alert("Соединение установлено.");
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            alert('Соединение закрыто чисто');
+        } else {
+            alert('Обрыв соединения'); // например, "убит" процесс сервера
+        }
+        alert('Код: ' + event.code + ' причина: ' + event.reason);
+    };
+
+    socket.onmessage = function(event) {
+        showMessage(event.data);
+    };
+
+    socket.onerror = function(error) {
+        alert("Ошибка " + error.message);
+    };
+
+    document.forms.publish.onsubmit = function() {
+        var outgoingMessage = this.message.value;
+
+        socket.send(outgoingMessage);
+        return false;
+    };
+
+    document.getElementById("close").onclick = () => {
+        socket.close()
+    };
+
+    document.getElementById("open").onclick = () => {
+        socket = new WebSocket("ws://localhost:3000/ws");
+    };
+
+    function showMessage(message) {
+        var messageElem = document.createElement('div');
+        messageElem.appendChild(document.createTextNode(message));
+        document.getElementById('subscribe').appendChild(messageElem);
+    }
+</script>
+</body>
+</html>
