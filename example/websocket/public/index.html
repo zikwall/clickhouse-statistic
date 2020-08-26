@@ -6,7 +6,6 @@
 </head>
 <body>
 <form name="publish">
-    <input type="text" name="message">
     <input type="submit" value="Отправить">
     <input id="close" type="button" value="Закрыть соединение">
     <input id="open" type="button" value="Открыть соединение">
@@ -15,33 +14,43 @@
 <div id="subscribe"></div>
 
 <script type="text/javascript">
-    var socket = new WebSocket("ws://localhost:3000/ws");
+    // example kafka message
+    const kafkaMessage = {
+        user_id: 10,
+        app: 'web_app_client',
+        host: 'localhost:3000',
+        event: 'test_event',
+        ip: '0.0.0.0',
+        guid: 'test_guid',
+        created_at: ''
+    }
 
-    socket.onopen = function() {
-        alert("Соединение установлено.");
+    let socket = new WebSocket("ws://localhost:3000/ws");
+
+    socket.onopen = () => {
+        console.log("Соединение установлено.");
     };
 
-    socket.onclose = function(event) {
+    socket.onclose = (event) => {
         if (event.wasClean) {
-            alert('Соединение закрыто чисто');
+            console.log('Соединение закрыто чисто');
         } else {
-            alert('Обрыв соединения'); // например, "убит" процесс сервера
+            console.log('Обрыв соединения'); // например, "убит" процесс сервера
         }
-        alert('Код: ' + event.code + ' причина: ' + event.reason);
+        console.log('Код: ' + event.code + ' причина: ' + event.reason);
     };
 
-    socket.onmessage = function(event) {
+    socket.onmessage = (event) => {
         showMessage(event.data);
     };
 
     socket.onerror = function(error) {
-        alert("Ошибка " + error.message);
+        console.log("Ошибка " + error.message);
     };
 
-    document.forms.publish.onsubmit = function() {
-        var outgoingMessage = this.message.value;
-
-        socket.send(outgoingMessage);
+    document.forms.publish.onsubmit = () => {
+        kafkaMessage.created_at = getRfcTime()
+        socket.send(JSON.stringify(kafkaMessage));
         return false;
     };
 
@@ -53,10 +62,16 @@
         socket = new WebSocket("ws://localhost:3000/ws");
     };
 
-    function showMessage(message) {
-        var messageElem = document.createElement('div');
+    const showMessage = (message) => {
+        const messageElem = document.createElement('div');
         messageElem.appendChild(document.createTextNode(message));
         document.getElementById('subscribe').appendChild(messageElem);
+    }
+
+    const getRfcTime = () => {
+        let time = (new Date);
+        // YYYY-MM-DD HH:ii:ss
+        return `${time.getFullYear()}-${time.getMonth()}-${time.getDay()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
     }
 </script>
 </body>
