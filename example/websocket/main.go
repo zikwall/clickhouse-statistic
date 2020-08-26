@@ -30,6 +30,7 @@ func main() {
 
 			if messageType == websocket.TextMessage {
 				internal.Event(string(message))
+				_ = c.WriteMessage(websocket.TextMessage, message)
 			} else {
 				log.Println("websocket message received of type", messageType)
 			}
