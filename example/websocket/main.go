@@ -48,7 +48,7 @@ func main() {
 			messageType, message, err := c.ReadMessage()
 			if err != nil {
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					log.Println("read error:", err)
+					internal.Error(err)
 				}
 
 				return
@@ -56,7 +56,9 @@ func main() {
 
 			if messageType == websocket.TextMessage {
 				internal.Event(string(message))
-				_ = c.WriteMessage(websocket.TextMessage, message)
+				if err = c.WriteMessage(websocket.TextMessage, message); err != nil {
+					internal.Error(err)
+				}
 			} else {
 				log.Println("websocket message received of type", messageType)
 			}

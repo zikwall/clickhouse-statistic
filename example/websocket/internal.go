@@ -13,6 +13,7 @@ type (
 		register   chan *websocket.Conn
 		unregister chan *websocket.Conn
 		event      chan string
+		errors     chan error
 	}
 	Handlers struct {
 		eventHandler func(string) error
@@ -26,6 +27,7 @@ func NewInternal() *Internal {
 	i.register = make(chan *websocket.Conn)
 	i.unregister = make(chan *websocket.Conn)
 	i.event = make(chan string)
+	i.errors = make(chan error)
 
 	return i
 }
@@ -40,8 +42,12 @@ func (i *Internal) SetErrorHandler(handler func(error)) {
 
 func (i Internal) handleEvent(event string) {
 	if err := i.eventHandler(event); err != nil {
-		i.errorHandler(err)
+		i.Error(err)
 	}
+}
+
+func (i Internal) handleError(err error) {
+	i.errorHandler(err)
 }
 
 func (i *Internal) handleConnect(connection *websocket.Conn) {
@@ -63,6 +69,8 @@ func (i *Internal) Listen() {
 			i.handleEvent(event)
 		case connection := <-i.unregister:
 			i.handleDisconnect(connection)
+		case err := <-i.errors:
+			i.handleError(err)
 		}
 	}
 }
@@ -77,4 +85,8 @@ func (i Internal) Connect(connection *websocket.Conn) {
 
 func (i Internal) Disconnect(connection *websocket.Conn) {
 	i.unregister <- connection
+}
+
+func (i Internal) Error(err error) {
+	i.errors <- err
 }
