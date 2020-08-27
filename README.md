@@ -146,6 +146,27 @@ docker exec -it clickhouse-kafka \
     --delete
 ```
 
+- [x] Drop groups
+
+```shell script
+docker exec -it clickhouse-kafka \
+  kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --delete \
+    --group my-group
+```
+
+- [x] State consumer
+
+```shell script
+docker exec -it clickhouse-kafka \
+  kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --describe \
+    --state \
+    --group my-group
+```
+
 **after put messages in producer console && to see messages printed out in second terminal, where run Kafka CLI consumer**
 
 - [x] Show full logs fro Kafka run: `$ docker logs -f clickhouse-kafka`
