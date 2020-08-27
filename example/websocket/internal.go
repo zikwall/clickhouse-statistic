@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gofiber/websocket"
 	"log"
 )
@@ -9,10 +8,15 @@ import (
 type (
 	client   struct{}
 	Internal struct {
+		Handlers
 		clients    map[*websocket.Conn]client
 		register   chan *websocket.Conn
 		unregister chan *websocket.Conn
 		event      chan string
+	}
+	Handlers struct {
+		eventHandler func(string) error
+		errorHandler func(error)
 	}
 )
 
@@ -26,8 +30,18 @@ func NewInternal() *Internal {
 	return i
 }
 
+func (i *Internal) SetEventHandler(handler func(string) error) {
+	i.eventHandler = handler
+}
+
+func (i *Internal) SetErrorHandler(handler func(error)) {
+	i.errorHandler = handler
+}
+
 func (i Internal) handleEvent(event string) {
-	fmt.Println(event)
+	if err := i.eventHandler(event); err != nil {
+		i.errorHandler(err)
+	}
 }
 
 func (i *Internal) handleConnect(connection *websocket.Conn) {

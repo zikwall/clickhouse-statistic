@@ -1,14 +1,40 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/gofiber/fiber"
 	"github.com/gofiber/websocket"
+	"github.com/segmentio/kafka-go"
 	"log"
 )
 
 func main() {
+	// todo init inside service container
+	kfk, err := NewKafkaWriter(context.Background(), KafkaConfig{
+		address:   "localhost:9092",
+		topic:     "ClickhouseTopic",
+		partition: 0,
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	internal := NewInternal()
+	// todo error pool
+	internal.SetErrorHandler(func(err error) {
+		fmt.Println(err)
+	})
+	// todo batch write to kafka
+	internal.SetEventHandler(func(event string) error {
+		err := kfk.Send(10, kafka.Message{
+			Value: []byte(event),
+		})
+
+		return err
+	})
+
 	websocketHandler := func(c *websocket.Conn) {
 		// Удаляем клиента из соединений
 		defer func() {
