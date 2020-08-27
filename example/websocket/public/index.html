@@ -71,7 +71,17 @@
     const getRfcTime = () => {
         let time = (new Date);
         // YYYY-MM-DD HH:ii:ss
-        return `${time.getFullYear()}-${time.getMonth()}-${time.getDay()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+        let year = time.getFullYear();
+        let month = pad(time.getMonth());
+        let day = pad(time.getDay());
+        let hours = pad(time.getHours());
+        let minutes = pad(time.getMinutes());
+        let seconds = pad(time.getSeconds());
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const pad = (n) => {
+        return n < 10 ? '0' + n : n
     }
 </script>
 </body>
